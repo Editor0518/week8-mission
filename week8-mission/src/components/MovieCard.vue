@@ -62,7 +62,7 @@ const cancelMovie = () => {
 
 </script>
 <template>
-    <div class="card">
+    <div class="card" :class="{'editing': data.movie.isEditing}">
         <div class="poster-area">
             <img :src="data.movie.poster" :alt="data.movie.title" class="poster">
         </div>
@@ -113,6 +113,10 @@ const cancelMovie = () => {
 .card:hover { 
   transform: translateY(-5px); 
   box-shadow: 0 8px 15px rgba(0,0,0,0.1); 
+}
+.card.editing{
+  border: 1px solid #2ecc71;
+  box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
 }
 .poster-area { 
   position: relative; 
