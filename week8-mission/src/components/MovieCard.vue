@@ -39,6 +39,10 @@ const saveMovie = () => {
   });
 }
 
+const cancelMovie = () => {
+  emit('cancel-movie', data.movie.id)
+}
+
 /*
 옵션 C: 개별 영화 정보 수정(Edit) 기능 (난이도: 상)
 ● 요구사항: 영화 카드 내부에 [수정] 버튼을 추가하세요. 클릭 시 영화 제목과 평점이
@@ -58,10 +62,12 @@ const emit = defineEmits(['like-movie', 'delete-movie', 'edit-movie', 'cancel-mo
         <div class="content-area">
           <template v-if="data.movie.isEditing">
             <!--편집 상태에서 보이는 모습-->
-            <input v-model="draftMovie.title" class="edit-title" type="text" value="draftMovie.value.title" placeholder="영화 제목 입력...">
+            <input v-model="draftMovie.title" @keyup.enter="saveMovie" @keyup.esc="cancelMovie" tabindex="1"
+            class="edit-title" type="text" placeholder="영화 제목 입력...">
             <p class="rating">평점: 
-              <input v-model="draftMovie.rating" class="edit-rating" type="number" 
-              min="0" max="10" step="0.1" value="draftMovie.value.rating" placeholder="10.0">
+              <input v-model="draftMovie.rating" @keyup.enter="saveMovie" @keyup.esc="cancelMovie" tabindex="2"
+              class="edit-rating" type="number" 
+              min="0" max="10" step="0.1" placeholder="10.0">
               / 10
             </p>
           </template>
@@ -82,7 +88,7 @@ const emit = defineEmits(['like-movie', 'delete-movie', 'edit-movie', 'cancel-mo
             </template>
             <template v-else>
               <button class="btn save-btn" @click="saveMovie">저장</button>
-              <button class="btn cancel-btn" @click="$emit('cancel-movie', data.movie.id)">취소</button>
+              <button class="btn cancel-btn" @click="cancelMovie">취소</button>
             </template>
           </div>
         </div>
