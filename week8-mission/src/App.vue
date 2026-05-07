@@ -29,8 +29,6 @@ const movies = ref([
 }
 ]);
 
-
-
 //update 로직 (좋아요)
 const handleLike = (targetId) => {
   const movie = movies.value.find(m => m.id === targetId);
@@ -69,6 +67,7 @@ const handleSave = (targetId, updatedData) => {
   <div class="container">
     <h2>영화 리스트</h2>
     <template v-if="movies.length>0">
+      <p class="total-count">총 {{ movies.length }}개</p>
       <main class="movie-grid">
         <!--자식이 쓴 이벤트를 여기서 수신 대기-->
         <MovieCard
@@ -110,7 +109,11 @@ h2 {
   gap: 25px; 
 }
 .no-movie{
+  margin-top: 20%;
   text-align: center;
+  color: gray;
+}
+.total-count{
   color: gray;
 }
 </style>
