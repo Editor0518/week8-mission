@@ -1,6 +1,13 @@
 <script setup>
 import { ref } from 'vue';
 
+/*
+옵션 C: 개별 영화 정보 수정(Edit) 기능 (난이도: 상)
+● 요구사항: 영화 카드 내부에 [수정] 버튼을 추가하세요. 클릭 시 영화 제목과 평점이
+텍스트에서 텍스트 입력창(<input>)으로 변신해야 합니다. 값을 고친 뒤 [저장] 버튼을
+누르면 부모 데이터를 갱신(Emit)하고, 카드가 다시 원래 상태로 돌아오도록 구현하세요.
+*/
+
 // 1. 부모로부터 수신할 데이터(Props)
 const data = defineProps({
     movie: {
@@ -9,9 +16,13 @@ const data = defineProps({
     }
 })
 
+// 2. 부모에게 발신할 이벤트(Emit) 명세
+const emit = defineEmits(['like-movie', 'delete-movie', 'edit-movie', 'cancel-movie', 'save-movie']);
+
+//수정 시 임시 데이터
 const draftMovie = ref(
   {
-    title: "", rating: "0.0"
+    title: "", rating: 0
   }
 );
 
@@ -23,16 +34,21 @@ const editMovie = () => {
 }
 
 const saveMovie = () => {
-  if(draftMovie.value.title.trim()==="")
-    draftMovie.value.title = data.movie.title;
+  if(draftMovie.value.title.trim()===""){
+    draftMovie.value.title = data.movie.title; //이전 데이터로 초기화
+    alert("제목이 입력되지 않았습니다.");
+    return;
+  }
+  if(draftMovie.value.rating===""){
+    draftMovie.value.rating = data.movie.rating; //이전 데이터로 초기화
+    alert("평점이 입력되지 않았습니다.");
+    return;
+  }
+  else if(draftMovie.value.rating > 10.0 || draftMovie.value.rating < 0.0){
+    alert("평점은 0에서 10 사이 숫자여야 합니다.");
+    return;
+  }
   
-  if(draftMovie.value.rating==="")
-    draftMovie.value.rating = data.movie.rating;
-  else if(draftMovie.value.rating>10.0)
-    draftMovie.value.rating = 10.0
-  else if(draftMovie.value.rating<0.0)
-    draftMovie.value.rating = 0.0
-
   emit('save-movie', data.movie.id, {
     title: draftMovie.value.title.trim(),
     rating: draftMovie.value.rating
@@ -43,15 +59,6 @@ const cancelMovie = () => {
   emit('cancel-movie', data.movie.id)
 }
 
-/*
-옵션 C: 개별 영화 정보 수정(Edit) 기능 (난이도: 상)
-● 요구사항: 영화 카드 내부에 [수정] 버튼을 추가하세요. 클릭 시 영화 제목과 평점이
-텍스트에서 텍스트 입력창(<input>)으로 변신해야 합니다. 값을 고친 뒤 [저장] 버튼을
-누르면 부모 데이터를 갱신(Emit)하고, 카드가 다시 원래 상태로 돌아오도록 구현하세요.
-*/
-
-// 2. 부모에게 발신할 이벤트(Emit) 명세
-const emit = defineEmits(['like-movie', 'delete-movie', 'edit-movie', 'cancel-movie', 'save-movie']);
 
 </script>
 <template>
@@ -135,7 +142,7 @@ h3 {
   margin-bottom: 4px;
 }
 .edit-rating{
-  width: 40px;
+  width: 45px;
   border-color: #f39c12;
 }
 .rating { 
