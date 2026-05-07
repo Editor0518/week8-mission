@@ -79,6 +79,7 @@ const cancelMovie = () => {
             <!--편집 상태에서 보이는 모습-->
             <input v-model="draftMovie.title" @keyup.enter="saveMovie" @keyup.esc="cancelMovie" tabindex="1"
             class="edit-title" type="text" placeholder="영화 제목 입력..." maxlength="64"
+            :title="draftMovie.title"
             >
             <p class="rating">평점: 
               <input v-model="draftMovie.rating" @keyup.enter="saveMovie" @keyup.esc="cancelMovie" tabindex="2"
@@ -89,7 +90,7 @@ const cancelMovie = () => {
           </template>
           <template v-else>
             <!--편집 상태가 아닐 때(평소) 보이는 모습-->
-            <h3>{{ data.movie.title }}</h3>
+            <h3 class="card-title" :title="data.movie.title">{{ data.movie.title }}</h3>
             <p class="rating">평점: {{ data.movie.rating }} / 10</p>
           </template>
 
@@ -126,6 +127,13 @@ const cancelMovie = () => {
 .card.editing{
   border: 1px solid #2ecc71;
   box-shadow: 0 4px 6px rgba(46, 204, 113, 0.3);
+}
+.card-title{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* 초과 시 말줄임표 */
+  width: 100%;
+  display: block;
 }
 .poster-area { 
   position: relative; 
