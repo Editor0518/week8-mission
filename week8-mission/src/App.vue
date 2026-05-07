@@ -29,6 +29,8 @@ const movies = ref([
 }
 ]);
 
+
+
 //update 로직 (좋아요)
 const handleLike = (targetId) => {
   const movie = movies.value.find(m => m.id === targetId);
@@ -66,19 +68,24 @@ const handleSave = (targetId, updatedData) => {
 <template>
   <div class="container">
     <h2>영화 리스트</h2>
-    <main class="movie-grid">
-      <!--자식이 쓴 이벤트를 여기서 수신 대기-->
-      <MovieCard
-        v-for="m in movies"
-        :key="m.id"
-        :movie="m"
-        @like-movie="handleLike"
-        @delete-movie="handleDelete"
-        @edit-movie="handleEdit"
-        @cancel-movie="handleCancel"
-        @save-movie="handleSave"
-      />
-    </main>
+    <template v-if="movies.length>0">
+      <main class="movie-grid">
+        <!--자식이 쓴 이벤트를 여기서 수신 대기-->
+        <MovieCard
+          v-for="m in movies"
+          :key="m.id"
+          :movie="m"
+          @like-movie="handleLike"
+          @delete-movie="handleDelete"
+          @edit-movie="handleEdit"
+          @cancel-movie="handleCancel"
+          @save-movie="handleSave"
+        />
+      </main>
+    </template>
+    <template v-else>
+      <p class="no-movie">영화가 없습니다.</p>
+    </template>
   </div>
 </template>
 <style scoped>
@@ -101,5 +108,9 @@ h2 {
   display: grid; 
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); 
   gap: 25px; 
+}
+.no-movie{
+  text-align: center;
+  color: gray;
 }
 </style>
