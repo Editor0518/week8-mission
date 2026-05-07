@@ -66,6 +66,7 @@ const handleSave = (targetId, updatedData) => {
   }
 };
 
+//평점 순 정렬
 const sortByRating = () => {
   if(sortOrder.value === 1)
     sortOrder.value = 0; //한번 더 클릭한 경우 취소
@@ -73,6 +74,7 @@ const sortByRating = () => {
   sortMovie();
 }
 
+//좋아요(추천) 순 정렬
 const sortByLikes = () => {
   if(sortOrder.value === 2)
     sortOrder.value = 0; //한번 더 클릭한 경우 취소
@@ -80,6 +82,7 @@ const sortByLikes = () => {
   sortMovie();
 }
 
+//영화 카드 정렬
 const sortMovie = () => {
   if(sortOrder.value === 1){
     movies.value.sort((a, b) => b.rating - a.rating);

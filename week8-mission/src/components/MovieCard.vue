@@ -34,9 +34,14 @@ const editMovie = () => {
 }
 
 const saveMovie = () => {
-  if(draftMovie.value.title.trim()===""){
+  const newTitle = draftMovie.value.title.trim();
+  if(newTitle === ""){
     draftMovie.value.title = data.movie.title; //이전 데이터로 초기화
     alert("제목이 입력되지 않았습니다.");
+    return;
+  }
+  else if(newTitle.length>64){
+    alert("제목은 최대 64자까지만 입력 가능합니다. (현재 글자 수:"+newTitle.length+"자)");
     return;
   }
   if(draftMovie.value.rating===""){
@@ -48,10 +53,13 @@ const saveMovie = () => {
     alert("평점은 0에서 10 사이 숫자여야 합니다.");
     return;
   }
+
+  //소수점 아래 한 자리만
+  const newRating = Number(draftMovie.value.rating.toFixed(1));
   
   emit('save-movie', data.movie.id, {
-    title: draftMovie.value.title.trim(),
-    rating: draftMovie.value.rating
+    title: newTitle,
+    rating: newRating
   });
 }
 
@@ -70,7 +78,8 @@ const cancelMovie = () => {
           <template v-if="data.movie.isEditing">
             <!--편집 상태에서 보이는 모습-->
             <input v-model="draftMovie.title" @keyup.enter="saveMovie" @keyup.esc="cancelMovie" tabindex="1"
-            class="edit-title" type="text" placeholder="영화 제목 입력...">
+            class="edit-title" type="text" placeholder="영화 제목 입력..." maxlength="64"
+            >
             <p class="rating">평점: 
               <input v-model="draftMovie.rating" @keyup.enter="saveMovie" @keyup.esc="cancelMovie" tabindex="2"
               class="edit-rating" type="number" 
